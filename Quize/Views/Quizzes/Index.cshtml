@@ -1,0 +1,151 @@
+﻿@model Quize.Helpers.PaginatedList<Quize.Models.Quizzes>
+
+<h1>Quizzes List</h1>
+
+<form asp-controller="Quizzes" asp-action="Index" method="get">
+    <input type="text" name="searchTerm" value="@ViewData["CurrentFilter"]"
+           placeholder="Search quizzes..."
+           oninput="if(this.value.length==0) this.form.submit();">
+    <button type="submit">Search</button>
+</form>
+
+<p class="mb-3">Showing @Model.Count out of @Model.TotalPages quizzes</p>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Create New Quiz</a>
+
+<div class="accordion" id="quizzesAccordion">
+    @foreach (var quiz in Model)
+    {
+        <div class="accordion-item quiz-item" data-quiz-title="@quiz.Title.ToLower()">
+            <h2 class="accordion-header" id="heading@(quiz.Id)">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse@(quiz.Id)" aria-expanded="false" aria-controls="collapse@(quiz.Id)">
+                    @quiz.Title - by @quiz.Author.Username
+                </button>
+            </h2>
+            <div id="collapse@(quiz.Id)" class="accordion-collapse collapse" aria-labelledby="heading@(quiz.Id)"
+                 data-bs-parent="#quizzesAccordion">
+                <div class="accordion-body">
+                    <div class="row">
+                        <!-- Author Information -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><b>Author</b></label>
+                                <input type="text" class="form-control" value="@quiz.Author.Username" readonly />
+                            </div>
+                        </div>
+                        <!-- Tags -->
+                        <div class="form-group mt-3 mb-3">
+                            <label><b>Tags</b></label>
+                            <div>
+                                @foreach (var quizTag in quiz.QuizzesTags_List)
+                                {
+                                    <span class="badge bg-primary rounded-pill me-2">@quizTag.Tag.Name</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><b>Description</b></label>
+                                <textarea class="form-control" rows="3" readonly>@quiz.Description</textarea>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label><b>Splash Image</b></label>
+                                @if (!string.IsNullOrEmpty(quiz.SplashImage))
+                                {
+                                    <img src="~/uploads/@quiz.SplashImage" class="img-fluid shadow w-100" alt="Quiz Splash" />
+                                }
+                                <input type="text" class="form-control" value="@quiz.SplashImage" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="mt-3"><b>Questions</b></label>
+                            <div class="accordion" id="accordionQuiz@(quiz.Id)">
+                                @foreach (var (question, index) in quiz.Questions_List.Select((q, i) => (q, i + 1)))
+                                {
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingQuestion@(question.Id)">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseQuestion@(question.Id)" aria-expanded="false" aria-controls="collapseQuestion@(question.Id)">
+                                                Question @index
+                                            </button>
+                                        </h2>
+                                        <div id="collapseQuestion@(question.Id)" class="accordion-collapse collapse" aria-labelledby="headingQuestion@(question.Id)"
+                                             data-bs-parent="#accordionQuiz@(quiz.Id)">
+                                            <div class="accordion-body">
+                                                <div class="form-group">
+                                                    <label><b>Text</b></label>
+                                                    <textarea class="form-control" rows="3" readonly>@question.Text</textarea>
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <label><b>Splash Image</b></label>
+                                                    @if (!string.IsNullOrEmpty(question.SplashImage))
+                                                    {
+                                                        <img src="~/uploads/@question.SplashImage" class="img-fluid shadow w-100" alt="Question Splash" />
+                                                    }
+                                                    <input type="text" class="form-control" value="@question.SplashImage" readonly />
+                                                </div>
+
+                                                <div class="form-group mt-3">
+                                                    <label><b>Answers</b></label>
+                                                    @foreach (var answer in question.Answers_List)
+                                                    {
+                                                        <div class="input-group mb-2">
+                                                            <input type="text" class="form-control" value="@answer.Text" readonly />
+                                                            <div class="input-group-append">
+                                                                <div class="input-group-text">
+                                                                    <input type="checkbox" @(answer.Text == question.CorrectAnswer ? "checked" : "") disabled />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group mt-3">
+                        <a asp-action="Edit" asp-route-id="@quiz.Id" class="btn btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@quiz.Id" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    var totalPages = Model.TotalPages;
+    var currentPage = Model.PageIndex;
+}
+
+<div class="mt-3 pagination justify-content-center" aria-label="Page navigation">
+        <a asp-action="Index"
+           asp-route-pageNumber="@(Model.PageIndex - 1)"
+           asp-route-searchTerm="@ViewData["CurrentFilter"]"
+           class="btn btn-default @prevDisabled">
+            Previous
+        </a>
+
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            <a asp-action="Index"
+               asp-route-pageNumber="@i"
+               asp-route-searchTerm="@ViewData["CurrentFilter"]"
+               class="btn btn-default @(i == currentPage ? "disabled" : "")">
+                @i
+            </a>
+        }
+
+        <a asp-action="Index"
+           asp-route-pageNumber="@(Model.PageIndex + 1)"
+           asp-route-searchTerm="@ViewData["CurrentFilter"]"
+           class="btn btn-default @nextDisabled">
+            Next
+        </a>
+
+</div>

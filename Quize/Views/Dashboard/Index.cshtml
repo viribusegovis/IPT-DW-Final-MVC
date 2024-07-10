@@ -1,0 +1,112 @@
+﻿@model Quize.Models.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h1>Dashboard</h1>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Total Quizzes</h5>
+                <p class="card-text display-4">@Model.TotalQuizzes</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Active Users</h5>
+                <p class="card-text display-4">@Model.ActiveUsers</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Quizzes Taken Today</h5>
+                <p class="card-text display-4">@Model.QuizzesTakenToday</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Avg. Completion Rate</h5>
+                <p class="card-text display-4">@Model.AvgCompletionRate.ToString("F2")%</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Quiz Completions Over Time</h5>
+                <canvas id="quizCompletionsChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Top 5 Quizzes</h5>
+                <ul class="list-group">
+                    @foreach (var quiz in Model.TopQuizzes)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @quiz.Title
+                            <span class="badge bg-primary rounded-pill">@quiz.CompletionCount completions</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Recent User Registrations</h5>
+                <ul class="list-group">
+                    @foreach (var user in Model.RecentUsers)
+                    {
+                        <li class="list-group-item">@user.Name - @user.Email</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('quizCompletionsChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @Json.Serialize(Model.ChartLabels),
+                datasets: [{
+                    label: 'Quiz Completions',
+                    data: @Json.Serialize(Model.ChartData),
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+}

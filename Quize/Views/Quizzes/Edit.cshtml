@@ -1,0 +1,86 @@
+﻿@model Quize.Models.Quizzes
+
+<h1>Edit Quiz</h1>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SplashImage"></label>
+        <input type="file" name="splashImageFile" id="SplashImage" class="form-control" />
+        @if (!string.IsNullOrEmpty(Model.SplashImage))
+        {
+            <img src="~/uploads/@Model.SplashImage" alt="Quiz Splash Image" style="max-width:300px;" />
+        }
+        <span asp-validation-for="SplashImage" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="Author"></label>
+        <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.Authors"></select>
+        <span asp-validation-for="AuthorId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="selectedTags" class="control-label">Tags</label>
+        <select id="selectedTags" name="selectedTags" class="form-control" asp-items="ViewBag.AvailableTags" multiple>
+        </select>
+    </div>
+
+
+    <h3>Questions</h3>
+    Edit Questions
+
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $(input).next('img').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $(document).ready(function () {
+            $('input[type="file"]').change(function () {
+                previewImage(this);
+            });
+        });
+
+
+        $(document).ready(function () {
+            $('#selectedTags').select2({
+                placeholder: "Select tags",
+                allowClear: true
+            });
+        });
+    </script>
+}

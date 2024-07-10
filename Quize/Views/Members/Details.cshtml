@@ -1,0 +1,68 @@
+﻿@model Quize.Models.Members
+
+@{
+    ViewData["Title"] = "Member Details";
+}
+
+<h1>Member Details</h1>
+
+<div>
+    <h4>Basic User Data</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Username)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Username)
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <h4>User Quiz Data</h4>
+    <hr />
+    @if (Model.Quizzes != null && Model.Quizzes.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Quiz Title</th>
+                    <th>Description</th>
+                    <th>Number of Questions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var quiz in Model.Quizzes)
+                {
+                    <tr>
+                        <td>@quiz.Title</td>
+                        <td>@quiz.Description</td>
+                        <td>@quiz.Questions_List.Count</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>This user has not created any quizzes yet.</p>
+    }
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a> |
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

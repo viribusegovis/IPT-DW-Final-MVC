@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Quiz.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,10 +11,13 @@ builder.Services.AddDbContext<QuizDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+// referência ao serviço do Microsoft Identity
+// que faz a AUTENTICAÇÃO
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<QuizDbContext>();
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,11 +37,18 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapGet("/", context => {
+    context.Response.Redirect("/Identity/Account/Login");
+    return Task.CompletedTask;
+});
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
 app.MapRazorPages();
+
 
 app.Run();
