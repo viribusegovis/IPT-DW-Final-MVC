@@ -1,0 +1,40 @@
+﻿@model Quize.Models.Tags
+
+<h1>Tag Details</h1>
+
+<div>
+    <h4>Tag</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+</div>
+
+<h4>Associated Quizzes</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Quiz Title</th>
+            <th>Author</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var quizTag in Model.QuizzesTags_List)
+        {
+            <tr>
+                <td>@quizTag.Quiz.Title</td>
+                <td>@quizTag.Quiz.Author.Username</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a> |
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

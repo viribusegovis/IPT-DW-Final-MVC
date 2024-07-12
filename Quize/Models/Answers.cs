@@ -16,6 +16,7 @@ namespace Quize.Models
         public string Text { get; set; }
 
         public int QuestionId { get; set; }
+        public bool CorrectAnswer { get; set; }
 
         // Navigation property
         [ForeignKey("QuestionId")]

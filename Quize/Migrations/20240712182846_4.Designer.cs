@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Quize.Migrations
 {
     [DbContext(typeof(QuizDbContext))]
-    [Migration("20240709131455_09072024_1414")]
-    partial class _09072024_1414
+    [Migration("20240712182846_4")]
+    partial class _4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,7 +53,7 @@ namespace Quize.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ac6a7baa-32c0-48a3-82ec-9fd9a56733c4",
+                            Id = "a0e11453-a754-4ca0-adfc-9d89f4586d09",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -151,17 +151,17 @@ namespace Quize.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "62354be0-b7ca-4c06-835c-43acae02eac9",
+                            Id = "692d4e36-7529-4342-8fcb-374b68aab8dc",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "06458638-4f91-4fcb-b334-4d04f4cf3cc4",
+                            ConcurrencyStamp = "aa7970b5-0db2-4fef-b19c-c75aca8c3fa0",
                             Email = "quize.general@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "QUIZE.GENERAL@GMAIL.COM",
                             NormalizedUserName = "QUIZE.GENERAL@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAELdghJVQe9HWAz+BVpMivKzgKxBn4fe4+2pbAQPjir8r96gLNpot3mrGAFwjsSDVZg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKvSyoHvyrgcj80C73Ef6pnFijWqlLjgZcOV7G9kE3O7amfiXEwkt2QHBHBWwulF7Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "be43c18f-f7c1-4928-9ee3-43c98aa3765d",
+                            SecurityStamp = "ce97d136-0e55-486a-8be4-11bfc3a683d0",
                             TwoFactorEnabled = false,
                             UserName = "quize.general@gmail.com"
                         });
@@ -233,8 +233,8 @@ namespace Quize.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "62354be0-b7ca-4c06-835c-43acae02eac9",
-                            RoleId = "ac6a7baa-32c0-48a3-82ec-9fd9a56733c4"
+                            UserId = "692d4e36-7529-4342-8fcb-374b68aab8dc",
+                            RoleId = "a0e11453-a754-4ca0-adfc-9d89f4586d09"
                         });
                 });
 
@@ -266,6 +266,9 @@ namespace Quize.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("CorrectAnswer")
+                        .HasColumnType("bit");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
@@ -314,10 +317,6 @@ namespace Quize.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CorrectAnswer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("QuizId")
                         .HasColumnType("int");
 
@@ -361,8 +360,7 @@ namespace Quize.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId")
-                        .IsUnique();
+                    b.HasIndex("AuthorId");
 
                     b.ToTable("Quizzes");
                 });
@@ -475,8 +473,8 @@ namespace Quize.Migrations
             modelBuilder.Entity("Quize.Models.Quizzes", b =>
                 {
                     b.HasOne("Quize.Models.Members", "Author")
-                        .WithOne("Quizzes_List")
-                        .HasForeignKey("Quize.Models.Quizzes", "AuthorId")
+                        .WithMany("Quizzes")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -492,7 +490,7 @@ namespace Quize.Migrations
                         .IsRequired();
 
                     b.HasOne("Quize.Models.Tags", "Tag")
-                        .WithMany("QuestionsTags_List")
+                        .WithMany("QuizzesTags_List")
                         .HasForeignKey("Tag_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -504,8 +502,7 @@ namespace Quize.Migrations
 
             modelBuilder.Entity("Quize.Models.Members", b =>
                 {
-                    b.Navigation("Quizzes_List")
-                        .IsRequired();
+                    b.Navigation("Quizzes");
                 });
 
             modelBuilder.Entity("Quize.Models.Questions", b =>
@@ -522,7 +519,7 @@ namespace Quize.Migrations
 
             modelBuilder.Entity("Quize.Models.Tags", b =>
                 {
-                    b.Navigation("QuestionsTags_List");
+                    b.Navigation("QuizzesTags_List");
                 });
 #pragma warning restore 612, 618
         }

@@ -20,8 +20,6 @@ namespace Quize.Models
 
         public string? SplashImage { get; set; }
 
-        public string CorrectAnswer { get; set; }
-
         // Navigation properties
         [ForeignKey("QuizId")]
         public Quizzes Quiz { get; set; }

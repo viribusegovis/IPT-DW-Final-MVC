@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Quize.Migrations
 {
     /// <inheritdoc />
-    public partial class _09072024_1306 : Migration
+    public partial class _1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -193,7 +193,7 @@ namespace Quize.Migrations
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
-                    SplashImage = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    SplashImage = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -214,8 +214,8 @@ namespace Quize.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuizId = table.Column<int>(type: "int", nullable: false),
-                    SplashImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CorrectAnswer = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    SplashImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CorrectAnswer = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -275,17 +275,17 @@ namespace Quize.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "d204ec55-6615-4262-8fbe-73ba85fe4fbb", null, "Admin", "ADMIN" });
+                values: new object[] { "e65a4531-809f-4b7c-96a0-2ae5dffd7af4", null, "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "3fde6260-a129-4af8-be63-95026b7a21aa", 0, "24f4ad97-95cb-42d3-a0bd-0297ee4ca4a9", "quize.general@gmail.com", true, false, null, "QUIZE.GENERAL@GMAIL.COM", "QUIZE.GENERAL@GMAIL.COM", "AQAAAAIAAYagAAAAEF5UaKwuCQvVpy8rpEiHc84LyVX5uUzxLjzM2hdWgP3cFQ2a3/3gH3Iiqhujxn/52Q==", null, false, "3f1bc8c6-fe0c-4621-989e-09c403bd1fa0", false, "quize.general@gmail.com" });
+                values: new object[] { "519891ed-2ee0-4444-9f88-f93b4d92c6f6", 0, "45e9b0a0-4489-4738-8544-9bfe73fe0305", "quize.general@gmail.com", true, false, null, "QUIZE.GENERAL@GMAIL.COM", "QUIZE.GENERAL@GMAIL.COM", "AQAAAAIAAYagAAAAECZcVIYqqjmgEaur+SUKCzZIiRllNTtnXSAyA8clH6/6mQ1AhMW9TC6Jvzo3qJ2YWQ==", null, false, "3e8afbda-9464-4620-a2c4-9f850a2b5e28", false, "quize.general@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "d204ec55-6615-4262-8fbe-73ba85fe4fbb", "3fde6260-a129-4af8-be63-95026b7a21aa" });
+                values: new object[] { "e65a4531-809f-4b7c-96a0-2ae5dffd7af4", "519891ed-2ee0-4444-9f88-f93b4d92c6f6" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Answers_QuestionId",
@@ -339,8 +339,7 @@ namespace Quize.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Quizzes_AuthorId",
                 table: "Quizzes",
-                column: "AuthorId",
-                unique: true);
+                column: "AuthorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuizzesTags_Tag_Id",

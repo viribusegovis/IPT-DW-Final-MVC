@@ -11,8 +11,6 @@
 
 <p class="mb-3">Showing @Model.Count out of @Model.TotalPages quizzes</p>
 
-<a asp-action="Create" class="btn btn-primary mb-3">Create New Quiz</a>
-
 <div class="accordion" id="quizzesAccordion">
     @foreach (var quiz in Model)
     {
@@ -53,9 +51,8 @@
                                 <label><b>Splash Image</b></label>
                                 @if (!string.IsNullOrEmpty(quiz.SplashImage))
                                 {
-                                    <img src="~/uploads/@quiz.SplashImage" class="img-fluid shadow w-100" alt="Quiz Splash" />
+                                    <img src="~/uploads/quizzes/@quiz.SplashImage" class="img-fluid shadow w-100" alt="Quiz Splash" />
                                 }
-                                <input type="text" class="form-control" value="@quiz.SplashImage" readonly />
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -81,9 +78,8 @@
                                                     <label><b>Splash Image</b></label>
                                                     @if (!string.IsNullOrEmpty(question.SplashImage))
                                                     {
-                                                        <img src="~/uploads/@question.SplashImage" class="img-fluid shadow w-100" alt="Question Splash" />
+                                                        <img src="~/uploads/questions/@question.SplashImage" class="img-fluid shadow w-100" alt="Question Splash" />
                                                     }
-                                                    <input type="text" class="form-control" value="@question.SplashImage" readonly />
                                                 </div>
 
                                                 <div class="form-group mt-3">
@@ -93,25 +89,29 @@
                                                         <div class="input-group mb-2">
                                                             <input type="text" class="form-control" value="@answer.Text" readonly />
                                                             <div class="input-group-append">
-                                                                <div class="input-group-text">
-                                                                    <input type="checkbox" @(answer.Text == question.CorrectAnswer ? "checked" : "") disabled />
+                                                                <div class="input-group-text h-100">
+                                                                    <input type="checkbox" @(answer.CorrectAnswer ? "checked" : "") disabled />
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     }
                                                 </div>
+                                                <a asp-controller="Questions" asp-action="Edit" asp-route-id="@quiz.Id" class="btn btn-secondary">Edit Question</a>
+
                                             </div>
-                                        </div>
+                                        </div
                                     </div>
+
                                 }
                             </div>
                         </div>
-                    </div>
-                    <div class="btn-group mt-3">
-                        <a asp-action="Edit" asp-route-id="@quiz.Id" class="btn btn-primary">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@quiz.Id" class="btn btn-danger">Delete</a>
-                    </div>
+                    </div
+                    
                 </div>
+                <div class="btn-group mt-3">
+                        <a asp-action="Edit" asp-route-id="@quiz.Id" class="btn btn-primary">Edit Quiz</a>
+                        <a asp-action="Delete" asp-route-id="@quiz.Id" class="btn btn-danger">Delete Quiz</a>
+                    </div>
             </div>
         </div>
     }

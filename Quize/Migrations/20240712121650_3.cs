@@ -5,7 +5,7 @@
 namespace Quize.Migrations
 {
     /// <inheritdoc />
-    public partial class _09072024_1414 : Migration
+    public partial class _3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -13,40 +13,43 @@ namespace Quize.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetUserRoles",
                 keyColumns: new[] { "RoleId", "UserId" },
-                keyValues: new object[] { "256323eb-15ff-427f-aab5-3931bf6c8129", "d475045b-c324-43ea-b416-36a2484753d0" });
+                keyValues: new object[] { "e65a4531-809f-4b7c-96a0-2ae5dffd7af4", "519891ed-2ee0-4444-9f88-f93b4d92c6f6" });
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "256323eb-15ff-427f-aab5-3931bf6c8129");
+                keyValue: "e65a4531-809f-4b7c-96a0-2ae5dffd7af4");
 
             migrationBuilder.DeleteData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
-                keyValue: "d475045b-c324-43ea-b416-36a2484753d0");
+                keyValue: "519891ed-2ee0-4444-9f88-f93b4d92c6f6");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "SplashImage",
-                table: "Questions",
-                type: "nvarchar(max)",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+            migrationBuilder.DropColumn(
+                name: "CorrectAnswer",
+                table: "Questions");
+
+            migrationBuilder.AddColumn<bool>(
+                name: "CorrectAnswer",
+                table: "Answers",
+                type: "bit",
+                nullable: false,
+                defaultValue: false);
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "ac6a7baa-32c0-48a3-82ec-9fd9a56733c4", null, "Admin", "ADMIN" });
+                values: new object[] { "bbc7ad41-254d-4577-9a9f-63a6071c49e7", null, "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "62354be0-b7ca-4c06-835c-43acae02eac9", 0, "06458638-4f91-4fcb-b334-4d04f4cf3cc4", "quize.general@gmail.com", true, false, null, "QUIZE.GENERAL@GMAIL.COM", "QUIZE.GENERAL@GMAIL.COM", "AQAAAAIAAYagAAAAELdghJVQe9HWAz+BVpMivKzgKxBn4fe4+2pbAQPjir8r96gLNpot3mrGAFwjsSDVZg==", null, false, "be43c18f-f7c1-4928-9ee3-43c98aa3765d", false, "quize.general@gmail.com" });
+                values: new object[] { "7ebb1558-d062-49b6-b4bb-d0a816b36d09", 0, "f70a5c27-0e1b-416d-9908-aa9651a696cc", "quize.general@gmail.com", true, false, null, "QUIZE.GENERAL@GMAIL.COM", "QUIZE.GENERAL@GMAIL.COM", "AQAAAAIAAYagAAAAEJk8XS+RQG1p+Lmic6YefVRxSEWm8GD13U/REtvvlMozHmEvDPXjIfry2R0MR0F0WA==", null, false, "2d113a7f-9455-4b22-bb68-de43949699ab", false, "quize.general@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "ac6a7baa-32c0-48a3-82ec-9fd9a56733c4", "62354be0-b7ca-4c06-835c-43acae02eac9" });
+                values: new object[] { "bbc7ad41-254d-4577-9a9f-63a6071c49e7", "7ebb1558-d062-49b6-b4bb-d0a816b36d09" });
         }
 
         /// <inheritdoc />
@@ -55,42 +58,43 @@ namespace Quize.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetUserRoles",
                 keyColumns: new[] { "RoleId", "UserId" },
-                keyValues: new object[] { "ac6a7baa-32c0-48a3-82ec-9fd9a56733c4", "62354be0-b7ca-4c06-835c-43acae02eac9" });
+                keyValues: new object[] { "bbc7ad41-254d-4577-9a9f-63a6071c49e7", "7ebb1558-d062-49b6-b4bb-d0a816b36d09" });
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "ac6a7baa-32c0-48a3-82ec-9fd9a56733c4");
+                keyValue: "bbc7ad41-254d-4577-9a9f-63a6071c49e7");
 
             migrationBuilder.DeleteData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
-                keyValue: "62354be0-b7ca-4c06-835c-43acae02eac9");
+                keyValue: "7ebb1558-d062-49b6-b4bb-d0a816b36d09");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "SplashImage",
+            migrationBuilder.DropColumn(
+                name: "CorrectAnswer",
+                table: "Answers");
+
+            migrationBuilder.AddColumn<int>(
+                name: "CorrectAnswer",
                 table: "Questions",
-                type: "nvarchar(max)",
+                type: "int",
                 nullable: false,
-                defaultValue: "",
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
-                oldNullable: true);
+                defaultValue: 0);
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "256323eb-15ff-427f-aab5-3931bf6c8129", null, "Admin", "ADMIN" });
+                values: new object[] { "e65a4531-809f-4b7c-96a0-2ae5dffd7af4", null, "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "d475045b-c324-43ea-b416-36a2484753d0", 0, "170288bd-23e5-4697-8fc5-d64ecf8ffa0c", "quize.general@gmail.com", true, false, null, "QUIZE.GENERAL@GMAIL.COM", "QUIZE.GENERAL@GMAIL.COM", "AQAAAAIAAYagAAAAEGdQfMUZaFBB/7p0dPqmYNw5Ov8PHsJXeD1RdSLcyvPtkkHSImH18Q2ktksgB4QcWQ==", null, false, "ff31e2ab-7a46-4b2b-9067-e22018c9c91e", false, "quize.general@gmail.com" });
+                values: new object[] { "519891ed-2ee0-4444-9f88-f93b4d92c6f6", 0, "45e9b0a0-4489-4738-8544-9bfe73fe0305", "quize.general@gmail.com", true, false, null, "QUIZE.GENERAL@GMAIL.COM", "QUIZE.GENERAL@GMAIL.COM", "AQAAAAIAAYagAAAAECZcVIYqqjmgEaur+SUKCzZIiRllNTtnXSAyA8clH6/6mQ1AhMW9TC6Jvzo3qJ2YWQ==", null, false, "3e8afbda-9464-4620-a2c4-9f850a2b5e28", false, "quize.general@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "256323eb-15ff-427f-aab5-3931bf6c8129", "d475045b-c324-43ea-b416-36a2484753d0" });
+                values: new object[] { "e65a4531-809f-4b7c-96a0-2ae5dffd7af4", "519891ed-2ee0-4444-9f88-f93b4d92c6f6" });
         }
     }
 }

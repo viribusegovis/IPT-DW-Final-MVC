@@ -6,7 +6,7 @@ namespace Quize.Models
     {
         public Tags()
         {
-            QuestionsTags_List = new HashSet<QuizzesTags>();
+            QuizzesTags_List = new HashSet<QuizzesTags>();
         }
 
         [Key]
@@ -16,6 +16,6 @@ namespace Quize.Models
         public string Name { get; set; }
 
         // Navigation property
-        public ICollection<QuizzesTags> QuestionsTags_List { get; set; }
+        public ICollection<QuizzesTags> QuizzesTags_List { get; set; }
     }
 }

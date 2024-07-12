@@ -41,7 +41,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapGet("/", context => {
-    context.Response.Redirect("/Identity/Account/Login");
+    context.Response.Redirect("/Dashboard");
     return Task.CompletedTask;
 });
 

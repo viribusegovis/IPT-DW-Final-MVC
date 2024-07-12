@@ -1,0 +1,68 @@
+﻿@model Quize.Models.Questions
+
+<h2>Create Question</h2>
+
+<form asp-action="Create" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="QuizId" />
+
+    <div class="form-group">
+        <label asp-for="Text" class="control-label"></label>
+        <textarea asp-for="Text" class="form-control"></textarea>
+        <span asp-validation-for="Text" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SplashImage" class="control-label"></label>
+        <input type="file" name="splashImageFile" id="splashImageFile" class="form-control" onchange="previewImage(this);" />
+        <img id="imagePreview" src="#" alt="Question Image" style="max-width:200px; margin-top:10px; display:none;" />
+    </div>
+
+    <h4>Answers</h4>
+    @for (int i = 0; i < 4; i++)
+    {
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input type="radio" name="CorrectAnswer" value="@i" @(i == 0 ? "checked" : "") />
+                    </div>
+                </div>
+                <input type="text" name="answerTexts" class="form-control" placeholder="Answer @(i + 1)" />
+            </div>
+        </div>
+    }
+
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-controller="Quizzes" asp-action="Index" asp-route-id="@Model.QuizId">Back to Quiz</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function previewImage(input) {
+            var preview = document.getElementById('imagePreview');
+            var file = input.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "#";
+                preview.style.display = 'none';
+            }
+        }
+    </script>
+}

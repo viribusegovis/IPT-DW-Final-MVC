@@ -156,7 +156,7 @@ namespace Quize.Controllers
 
             if (imageFile != null)
             {
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads","quizzes");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
