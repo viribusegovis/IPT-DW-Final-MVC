@@ -11,19 +11,31 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Quize.Controllers
 {
+    /// <summary>
+    /// Controller for managing Questions.
+    /// </summary>
     [Authorize]
     public class QuestionsController : Controller
     {
         private readonly QuizDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
+        /// <summary>
+        /// Initializes a new instance of the QuestionsController.
+        /// </summary>
+        /// <param name="context">The database context.</param>
+        /// <param name="webHostEnvironment">The web host environment.</param>
         public QuestionsController(QuizDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
         }
 
-        // GET: Questions/Edit/5
+        /// <summary>
+        /// Displays the edit form for a specific question.
+        /// </summary>
+        /// <param name="id">The ID of the question to edit.</param>
+        /// <returns>A view containing the edit form for the specified question.</returns>
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -43,7 +55,16 @@ namespace Quize.Controllers
             return View(question);
         }
 
-        // POST: Questions/Edit/5
+        /// <summary>
+        /// Processes the edit form submission for a question.
+        /// </summary>
+        /// <param name="id">The ID of the question being edited.</param>
+        /// <param name="question">The updated question data.</param>
+        /// <param name="splashImageFile">The new splash image file, if any.</param>
+        /// <param name="answerTexts">The list of answer texts.</param>
+        /// <param name="answerIds">The list of answer IDs.</param>
+        /// <param name="CorrectAnswer">The ID of the correct answer.</param>
+        /// <returns>Redirects to the Quiz Index action if successful, otherwise returns to the Edit view.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Text,QuizId,CorrectAnswer")] Questions question, IFormFile? splashImageFile, List<string> answerTexts, List<int> answerIds, int CorrectAnswer)
@@ -72,22 +93,21 @@ namespace Quize.Controllers
                 }
             }
 
-            if (ModelState.IsValid){
-            
-                try {
+            if (ModelState.IsValid)
+            {
+                try
+                {
                     question.Answers_List.Clear();
-                    // Remove existing answers
-                    for (int i =0; i<answerTexts.Count; i++) {
-                        Answers newAnswer;
-                        if (answerIds[i] == CorrectAnswer)
+                    // Update answers
+                    for (int i = 0; i < answerTexts.Count; i++)
+                    {
+                        Answers newAnswer = new Answers()
                         {
-                             newAnswer= new Answers() { Id = answerIds[i], Text = answerTexts[i], QuestionId = question.Id, CorrectAnswer = true };
-                        }
-                        else
-                        {
-                             newAnswer = new Answers() { Id = answerIds[i], Text = answerTexts[i], QuestionId = question.Id, CorrectAnswer = false };
-                        }
-
+                            Id = answerIds[i],
+                            Text = answerTexts[i],
+                            QuestionId = question.Id,
+                            CorrectAnswer = (answerIds[i] == CorrectAnswer)
+                        };
                         question.Answers_List.Add(newAnswer);
                     }
 
@@ -124,12 +144,21 @@ namespace Quize.Controllers
             return View(question);
         }
 
+        /// <summary>
+        /// Checks if a question with the specified ID exists.
+        /// </summary>
+        /// <param name="id">The ID of the question to check.</param>
+        /// <returns>True if the question exists, false otherwise.</returns>
         private bool QuestionExists(int id)
         {
             return _context.Questions.Any(e => e.Id == id);
         }
 
-        // GET: Questions/Create
+        /// <summary>
+        /// Displays the create form for a new question.
+        /// </summary>
+        /// <param name="QuizId">The ID of the quiz to which the question will be added.</param>
+        /// <returns>A view containing the create form for a new question.</returns>
         [HttpGet("Questions/Create/{QuizId}")]
         public async Task<IActionResult> Create(int QuizId)
         {
@@ -142,12 +171,19 @@ namespace Quize.Controllers
             return View(question);
         }
 
-        // POST: Questions/Create
+        /// <summary>
+        /// Processes the create form submission for a new question.
+        /// </summary>
+        /// <param name="id">The ID of the quiz to which the question is being added.</param>
+        /// <param name="question">The new question data.</param>
+        /// <param name="splashImageFile">The splash image file for the question, if any.</param>
+        /// <param name="answerTexts">The list of answer texts.</param>
+        /// <param name="CorrectAnswer">The index of the correct answer.</param>
+        /// <returns>Redirects to the Quiz Index action if successful, otherwise returns to the Create view.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int? id, [Bind("Text,QuizId,SplashImage")] Questions question, IFormFile? splashImageFile, List<string> answerTexts, int CorrectAnswer)
         {
-
             if (id != question.QuizId)
             {
                 return NotFound();
@@ -167,16 +203,13 @@ namespace Quize.Controllers
                     // Add answers
                     for (int i = 0; i < answerTexts.Count; i++)
                     {
-                        if (i == CorrectAnswer)
+                        var newAnswer = new Answers
                         {
-                            var newAnswer = new Answers { Text = answerTexts[i], QuestionId = question.Id, CorrectAnswer = true };
-                            question.Answers_List.Add(newAnswer);
-                        }
-                        else
-                        {
-                            var newAnswer = new Answers { Text = answerTexts[i], QuestionId = question.Id, CorrectAnswer = false };
-                            question.Answers_List.Add(newAnswer);
-                        }
+                            Text = answerTexts[i],
+                            QuestionId = question.Id,
+                            CorrectAnswer = (i == CorrectAnswer)
+                        };
+                        question.Answers_List.Add(newAnswer);
                     }
 
                     _context.Add(question);
@@ -191,7 +224,11 @@ namespace Quize.Controllers
             return View(question);
         }
 
-
+        /// <summary>
+        /// Saves an image file to the server.
+        /// </summary>
+        /// <param name="imageFile">The image file to save.</param>
+        /// <returns>The unique filename of the saved image.</returns>
         private async Task<string> SaveImage(IFormFile imageFile)
         {
             string uniqueFileName = null;
@@ -210,6 +247,6 @@ namespace Quize.Controllers
 
             return uniqueFileName;
         }
-
     }
 }
+

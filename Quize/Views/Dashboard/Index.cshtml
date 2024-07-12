@@ -6,7 +6,9 @@
 
 <h1>Dashboard</h1>
 
+<!-- Dashboard Statistics Cards -->
 <div class="row">
+    <!-- Total Quizzes Card -->
     <div class="col-md-3">
         <div class="card">
             <div class="card-body">
@@ -15,6 +17,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Active Users Card -->
     <div class="col-md-3">
         <div class="card">
             <div class="card-body">
@@ -23,6 +27,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Quizzes Taken Today Card -->
     <div class="col-md-3">
         <div class="card">
             <div class="card-body">
@@ -31,6 +37,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Average Completion Rate Card -->
     <div class="col-md-3">
         <div class="card">
             <div class="card-body">
@@ -41,7 +49,9 @@
     </div>
 </div>
 
+<!-- Charts and Lists -->
 <div class="row mt-4">
+    <!-- Quiz Completions Chart -->
     <div class="col-md-6">
         <div class="card">
             <div class="card-body">
@@ -50,6 +60,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Top 5 Quizzes List -->
     <div class="col-md-6">
         <div class="card">
             <div class="card-body">
@@ -68,6 +80,7 @@
     </div>
 </div>
 
+<!-- Recent User Registrations -->
 <div class="row mt-4">
     <div class="col-md-6">
         <div class="card">
@@ -85,7 +98,10 @@
 </div>
 
 @section Scripts {
+    <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Quiz Completions Chart Initialization -->
     <script>
         var ctx = document.getElementById('quizCompletionsChart').getContext('2d');
         var chart = new Chart(ctx, {

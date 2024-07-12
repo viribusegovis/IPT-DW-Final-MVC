@@ -2,22 +2,26 @@
 
 <h2>Create Question</h2>
 
+<!-- Question Creation Form -->
 <form asp-action="Create" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="QuizId" />
 
+    <!-- Question Text -->
     <div class="form-group">
         <label asp-for="Text" class="control-label"></label>
         <textarea asp-for="Text" class="form-control"></textarea>
         <span asp-validation-for="Text" class="text-danger"></span>
     </div>
 
+    <!-- Question Image Upload -->
     <div class="form-group">
         <label asp-for="SplashImage" class="control-label"></label>
         <input type="file" name="splashImageFile" id="splashImageFile" class="form-control" onchange="previewImage(this);" />
         <img id="imagePreview" src="#" alt="Question Image" style="max-width:200px; margin-top:10px; display:none;" />
     </div>
 
+    <!-- Answer Options -->
     <h4>Answers</h4>
     @for (int i = 0; i < 4; i++)
     {
@@ -33,20 +37,24 @@
         </div>
     }
 
+    <!-- Submit Button -->
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-primary" />
     </div>
 </form>
 
+<!-- Back to Quiz Link -->
 <div>
     <a asp-controller="Quizzes" asp-action="Index" asp-route-id="@Model.QuizId">Back to Quiz</a>
 </div>
 
+<!-- Scripts Section -->
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
+        // Image Preview Function
         function previewImage(input) {
             var preview = document.getElementById('imagePreview');
             var file = input.files[0];

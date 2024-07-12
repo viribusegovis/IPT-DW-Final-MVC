@@ -2,6 +2,7 @@
 
 <h1>Quizzes List</h1>
 
+<!-- Search Form -->
 <form asp-controller="Quizzes" asp-action="Index" method="get">
     <input type="text" name="searchTerm" value="@ViewData["CurrentFilter"]"
            placeholder="Search quizzes..."
@@ -11,16 +12,19 @@
 
 <p class="mb-3">Showing @Model.Count out of @Model.TotalPages quizzes</p>
 
+<!-- Quizzes Accordion -->
 <div class="accordion" id="quizzesAccordion">
     @foreach (var quiz in Model)
     {
         <div class="accordion-item quiz-item" data-quiz-title="@quiz.Title.ToLower()">
+            <!-- Quiz Header -->
             <h2 class="accordion-header" id="heading@(quiz.Id)">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#collapse@(quiz.Id)" aria-expanded="false" aria-controls="collapse@(quiz.Id)">
                     @quiz.Title - by @quiz.Author.Username
                 </button>
             </h2>
+            <!-- Quiz Details -->
             <div id="collapse@(quiz.Id)" class="accordion-collapse collapse" aria-labelledby="heading@(quiz.Id)"
                  data-bs-parent="#quizzesAccordion">
                 <div class="accordion-body">
@@ -42,6 +46,7 @@
                                 }
                             </div>
                         </div>
+                        <!-- Quiz Description and Splash Image -->
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label><b>Description</b></label>
@@ -55,25 +60,30 @@
                                 }
                             </div>
                         </div>
+                        <!-- Questions -->
                         <div class="col-md-6">
                             <label class="mt-3"><b>Questions</b></label>
                             <div class="accordion" id="accordionQuiz@(quiz.Id)">
                                 @foreach (var (question, index) in quiz.Questions_List.Select((q, i) => (q, i + 1)))
                                 {
                                     <div class="accordion-item">
+                                        <!-- Question Header -->
                                         <h2 class="accordion-header" id="headingQuestion@(question.Id)">
                                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                     data-bs-target="#collapseQuestion@(question.Id)" aria-expanded="false" aria-controls="collapseQuestion@(question.Id)">
                                                 Question @index
                                             </button>
                                         </h2>
+                                        <!-- Question Details -->
                                         <div id="collapseQuestion@(question.Id)" class="accordion-collapse collapse" aria-labelledby="headingQuestion@(question.Id)"
                                              data-bs-parent="#accordionQuiz@(quiz.Id)">
                                             <div class="accordion-body">
+                                                <!-- Question Text -->
                                                 <div class="form-group">
                                                     <label><b>Text</b></label>
                                                     <textarea class="form-control" rows="3" readonly>@question.Text</textarea>
                                                 </div>
+                                                <!-- Question Splash Image -->
                                                 <div class="form-group mt-3">
                                                     <label><b>Splash Image</b></label>
                                                     @if (!string.IsNullOrEmpty(question.SplashImage))
@@ -81,7 +91,7 @@
                                                         <img src="~/uploads/questions/@question.SplashImage" class="img-fluid shadow w-100" alt="Question Splash" />
                                                     }
                                                 </div>
-
+                                                <!-- Answers -->
                                                 <div class="form-group mt-3">
                                                     <label><b>Answers</b></label>
                                                     @foreach (var answer in question.Answers_List)
@@ -97,25 +107,25 @@
                                                     }
                                                 </div>
                                                 <a asp-controller="Questions" asp-action="Edit" asp-route-id="@quiz.Id" class="btn btn-secondary">Edit Question</a>
-
                                             </div>
-                                        </div
+                                        </div>
                                     </div>
-
                                 }
                             </div>
                         </div>
-                    </div
-                    
-                </div>
-                <div class="btn-group mt-3">
-                        <a asp-action="Edit" asp-route-id="@quiz.Id" class="btn btn-primary">Edit Quiz</a>
-                        <a asp-action="Delete" asp-route-id="@quiz.Id" class="btn btn-danger">Delete Quiz</a>
                     </div>
+                </div>
+                <!-- Quiz Action Buttons -->
+                <div class="btn-group mt-3">
+                    <a asp-action="Edit" asp-route-id="@quiz.Id" class="btn btn-primary">Edit Quiz</a>
+                    <a asp-action="Delete" asp-route-id="@quiz.Id" class="btn btn-danger">Delete Quiz</a>
+                </div>
             </div>
         </div>
     }
 </div>
+
+<!-- Pagination -->
 @{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
@@ -124,28 +134,27 @@
 }
 
 <div class="mt-3 pagination justify-content-center" aria-label="Page navigation">
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-searchTerm="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+        Previous
+    </a>
+
+    @for (int i = 1; i <= totalPages; i++)
+    {
         <a asp-action="Index"
-           asp-route-pageNumber="@(Model.PageIndex - 1)"
+           asp-route-pageNumber="@i"
            asp-route-searchTerm="@ViewData["CurrentFilter"]"
-           class="btn btn-default @prevDisabled">
-            Previous
+           class="btn btn-default @(i == currentPage ? "disabled" : "")">
+            @i
         </a>
+    }
 
-        @for (int i = 1; i <= totalPages; i++)
-        {
-            <a asp-action="Index"
-               asp-route-pageNumber="@i"
-               asp-route-searchTerm="@ViewData["CurrentFilter"]"
-               class="btn btn-default @(i == currentPage ? "disabled" : "")">
-                @i
-            </a>
-        }
-
-        <a asp-action="Index"
-           asp-route-pageNumber="@(Model.PageIndex + 1)"
-           asp-route-searchTerm="@ViewData["CurrentFilter"]"
-           class="btn btn-default @nextDisabled">
-            Next
-        </a>
-
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-searchTerm="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+        Next
+    </a>
 </div>

@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Quize.Helpers;
 using Quize.Models;
-using System.Drawing.Printing;
 using System.IO;
 
 namespace Quize.Controllers
 {
+    /// <summary>
+    /// Controller for managing Quizzes.
+    /// </summary>
     [Authorize]
     public class QuizzesController : Controller
     {
@@ -17,12 +19,23 @@ namespace Quize.Controllers
         private readonly int PageSize = 1;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
+        /// <summary>
+        /// Initializes a new instance of the QuizzesController.
+        /// </summary>
+        /// <param name="context">The database context.</param>
+        /// <param name="webHostEnvironment">The web host environment.</param>
         public QuizzesController(QuizDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
         }
 
+        /// <summary>
+        /// Displays a paginated list of quizzes, with optional search functionality.
+        /// </summary>
+        /// <param name="searchTerm">The search term to filter quizzes.</param>
+        /// <param name="pageNumber">The page number to display.</param>
+        /// <returns>A view containing a paginated list of quizzes.</returns>
         public async Task<IActionResult> Index(string searchTerm, int? pageNumber)
         {
             ViewData["CurrentFilter"] = searchTerm;
@@ -46,8 +59,11 @@ namespace Quize.Controllers
             return View(paginatedQuizzes);
         }
 
-
-        // GET: Quizzes/Edit/
+        /// <summary>
+        /// Displays the edit form for a specific quiz.
+        /// </summary>
+        /// <param name="id">The ID of the quiz to edit.</param>
+        /// <returns>A view containing the edit form for the specified quiz.</returns>
         public async Task<IActionResult> Edit(int id)
         {
             var quiz = await _context.Quizzes
@@ -68,16 +84,18 @@ namespace Quize.Controllers
             return View(quiz);
         }
 
-
-
-
-
-        // POST: Quizzes/Edit/
+        /// <summary>
+        /// Processes the edit form submission for a quiz.
+        /// </summary>
+        /// <param name="id">The ID of the quiz being edited.</param>
+        /// <param name="quiz">The updated quiz data.</param>
+        /// <param name="selectedTags">The list of selected tag IDs.</param>
+        /// <param name="splashImageFile">The new splash image file, if any.</param>
+        /// <returns>Redirects to the Index action if successful, otherwise returns to the Edit view.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,AuthorId")] Quizzes quiz,List<int> selectedTags, IFormFile splashImageFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,AuthorId")] Quizzes quiz, List<int> selectedTags, IFormFile splashImageFile)
         {
-
             if (id != quiz.Id)
             {
                 return NotFound();
@@ -149,14 +167,18 @@ namespace Quize.Controllers
             return View(quiz);
         }
 
-
+        /// <summary>
+        /// Saves an image file to the server.
+        /// </summary>
+        /// <param name="imageFile">The image file to save.</param>
+        /// <returns>The unique filename of the saved image.</returns>
         private async Task<string> SaveImage(IFormFile imageFile)
         {
             string uniqueFileName = null;
 
             if (imageFile != null)
             {
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads","quizzes");
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "quizzes");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
@@ -169,6 +191,11 @@ namespace Quize.Controllers
             return uniqueFileName;
         }
 
+        /// <summary>
+        /// Updates the tags associated with a quiz.
+        /// </summary>
+        /// <param name="existingQuiz">The quiz to update.</param>
+        /// <param name="selectedTags">The list of selected tag IDs.</param>
         private void UpdateTags(Quizzes existingQuiz, List<int> selectedTags)
         {
             var currentTags = existingQuiz.QuizzesTags_List.ToList();
@@ -186,6 +213,11 @@ namespace Quize.Controllers
             }
         }
 
+        /// <summary>
+        /// Checks if a quiz with the specified ID exists.
+        /// </summary>
+        /// <param name="id">The ID of the quiz to check.</param>
+        /// <returns>True if the quiz exists, false otherwise.</returns>
         private bool QuizExists(int id)
         {
             return _context.Quizzes.Any(e => e.Id == id);

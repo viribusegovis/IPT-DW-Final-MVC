@@ -2,22 +2,30 @@
 
 <h1>Create Tag</h1>
 
+<!-- Tag Creation Form -->
 <form asp-action="Create">
+    <!-- Validation Summary -->
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <!-- Tag Name Input -->
     <div class="form-group">
         <label asp-for="Name" class="control-label"></label>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
+
+    <!-- Submit Button -->
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-primary" />
     </div>
 </form>
 
+<!-- Back to List Button -->
 <div>
     <button class="btn btn-secondary" asp-action="Index">Back to List</button>
 </div>
 
+<!-- Client-side Validation Scripts -->
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

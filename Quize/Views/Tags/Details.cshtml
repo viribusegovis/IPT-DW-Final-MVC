@@ -2,10 +2,12 @@
 
 <h1>Tag Details</h1>
 
+<!-- Tag Information -->
 <div>
     <h4>Tag</h4>
     <hr />
     <dl class="row">
+        <!-- Tag Name -->
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -15,6 +17,7 @@
     </dl>
 </div>
 
+<!-- Associated Quizzes -->
 <h4>Associated Quizzes</h4>
 <table class="table">
     <thead>
@@ -34,6 +37,7 @@
     </tbody>
 </table>
 
+<!-- Action Buttons -->
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a> |
     <a asp-action="Index" class="btn btn-secondary">Back to List</a>

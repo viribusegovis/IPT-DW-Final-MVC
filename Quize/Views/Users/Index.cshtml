@@ -6,7 +6,9 @@
 
 <h1>User Management</h1>
 
+<!-- Users Table -->
 <table class="table">
+    <!-- Table Header -->
     <thead>
         <tr>
             <th>@Html.DisplayNameFor(model => model.UserName)</th>
@@ -14,12 +16,16 @@
             <th>Actions</th>
         </tr>
     </thead>
+    <!-- Table Body -->
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
+                <!-- Username -->
                 <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+                <!-- Email -->
                 <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <!-- Action Buttons -->
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>

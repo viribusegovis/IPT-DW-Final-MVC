@@ -1,22 +1,41 @@
-﻿<!DOCTYPE html>
+﻿<!--
+    These two layouts serve different purposes:
+    1. The Login Layout is a simplified layout used specifically for the login page.
+       It doesn't include the header, sidebar, or footer, focusing solely on the login content.
+    2. The Main Layout is used for the rest of the application when a user is logged in.
+       It includes a header with navigation, a sidebar for quick access to different sections,
+       and a footer. This layout provides a consistent structure across the application.
+-->
+<!-- Login Layout -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta tags for character encoding and responsive design -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Page title -->
     <title>@ViewData["Title"] - Login</title>
+
+    <!-- CSS stylesheets -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
+    <!-- Main content container -->
     <div class="container">
         <main role="main" class="pb-3">
+            <!-- Renders the specific view content -->
             @RenderBody()
         </main>
     </div>
 
+    <!-- JavaScript libraries -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Renders additional scripts if any -->
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

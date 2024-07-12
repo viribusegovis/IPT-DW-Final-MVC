@@ -7,16 +7,25 @@
 <h1>Edit Tag</h1>
 
 <hr />
+
+<!-- Edit Form -->
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
+            <!-- Validation Summary -->
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Hidden Tag ID -->
             <input type="hidden" asp-for="Id" />
+
+            <!-- Tag Name Input -->
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
+            <!-- Action Buttons -->
             <div class="form-group mt-3">
                 <input type="submit" value="Save" class="btn btn-primary" /> |
                 <button class="btn btn-secondary" asp-action="Index">Back to List</button>
@@ -25,8 +34,7 @@
     </div>
 </div>
 
-
-
+<!-- Client-side Validation Scripts -->
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

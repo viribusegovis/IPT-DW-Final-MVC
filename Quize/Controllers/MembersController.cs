@@ -7,22 +7,38 @@ using System.Threading.Tasks;
 
 namespace Quize.Controllers
 {
+    /// <summary>
+    /// Controller for managing Members.
+    /// </summary>
     [Authorize]
     public class MembersController : Controller
     {
         private readonly QuizDbContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the MembersController.
+        /// </summary>
+        /// <param name="context">The database context.</param>
         public MembersController(QuizDbContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Displays a list of all members.
+        /// </summary>
+        /// <returns>A view containing a list of all members.</returns>
         public async Task<IActionResult> Index()
         {
             var members = await _context.Members.ToListAsync();
             return View(members);
         }
 
+        /// <summary>
+        /// Displays the edit form for a specific member.
+        /// </summary>
+        /// <param name="id">The ID of the member to edit.</param>
+        /// <returns>A view containing the edit form for the specified member.</returns>
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -38,6 +54,12 @@ namespace Quize.Controllers
             return View(member);
         }
 
+        /// <summary>
+        /// Processes the edit form submission for a member.
+        /// </summary>
+        /// <param name="id">The ID of the member being edited.</param>
+        /// <param name="member">The updated member data.</param>
+        /// <returns>Redirects to the Index action if successful, otherwise returns to the Edit view.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Email,Username")] Members member)
@@ -46,9 +68,10 @@ namespace Quize.Controllers
             {
                 return NotFound();
             }
+
+            // Debug: Print ModelState errors
             if (!ModelState.IsValid)
             {
-                // Debug: Print ModelState errors
                 foreach (var modelStateEntry in ModelState)
                 {
                     var key = modelStateEntry.Key;
@@ -63,6 +86,7 @@ namespace Quize.Controllers
                     }
                 }
             }
+
             if (ModelState.IsValid)
             {
                 try
@@ -86,6 +110,11 @@ namespace Quize.Controllers
             return View(member);
         }
 
+        /// <summary>
+        /// Displays details of a specific member, including their quizzes and questions.
+        /// </summary>
+        /// <param name="id">The ID of the member to display.</param>
+        /// <returns>A view containing the details of the specified member.</returns>
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -93,6 +122,7 @@ namespace Quize.Controllers
                 return NotFound();
             }
 
+            // Fetch the member with their quizzes and questions
             var member = await _context.Members
                 .Include(m => m.Quizzes)
                     .ThenInclude(q => q.Questions_List)
@@ -114,6 +144,11 @@ namespace Quize.Controllers
             return View(member);
         }
 
+        /// <summary>
+        /// Displays the delete confirmation page for a member.
+        /// </summary>
+        /// <param name="id">The ID of the member to delete.</param>
+        /// <returns>A view asking for confirmation to delete the specified member.</returns>
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,6 +166,11 @@ namespace Quize.Controllers
             return View(member);
         }
 
+        /// <summary>
+        /// Processes the member deletion after confirmation.
+        /// </summary>
+        /// <param name="id">The ID of the member to delete.</param>
+        /// <returns>Redirects to the Index action after successful deletion.</returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -141,6 +181,11 @@ namespace Quize.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// Checks if a member with the specified ID exists.
+        /// </summary>
+        /// <param name="id">The ID of the member to check.</param>
+        /// <returns>True if the member exists, false otherwise.</returns>
         private bool MemberExists(int id)
         {
             return _context.Members.Any(e => e.Id == id);

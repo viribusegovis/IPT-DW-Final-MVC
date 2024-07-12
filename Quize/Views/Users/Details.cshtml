@@ -6,29 +6,37 @@
 
 <h1>User Details</h1>
 
+<!-- User Information -->
 <div>
     <h4>User Information</h4>
     <hr />
     <dl class="row">
+        <!-- Username -->
         <dt class="col-sm-3">@Html.DisplayNameFor(model => model.UserName)</dt>
         <dd class="col-sm-9">@Model.UserName</dd>
 
+        <!-- Email -->
         <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Email)</dt>
         <dd class="col-sm-9">@Model.Email</dd>
 
+        <!-- Phone Number -->
         <dt class="col-sm-3">@Html.DisplayNameFor(model => model.PhoneNumber)</dt>
         <dd class="col-sm-9">@(Model.PhoneNumber != null ? Model.PhoneNumber : "N/A")</dd>
 
+        <!-- Email Confirmed Status -->
         <dt class="col-sm-3">@Html.DisplayNameFor(model => model.EmailConfirmed)</dt>
         <dd class="col-sm-9">@Model.EmailConfirmed</dd>
 
+        <!-- Account Lockout Status -->
         <dt class="col-sm-3">@Html.DisplayNameFor(model => model.LockoutEnabled)</dt>
         <dd class="col-sm-9">@Model.LockoutEnabled</dd>
 
+        <!-- Failed Access Attempts -->
         <dt class="col-sm-3">@Html.DisplayNameFor(model => model.AccessFailedCount)</dt>
         <dd class="col-sm-9">@Model.AccessFailedCount</dd>
     </dl>
 
+    <!-- User Roles -->
     <h4>Roles</h4>
     <ul>
         @foreach (var role in (IEnumerable<string>)ViewBag.Roles)
@@ -37,6 +45,7 @@
         }
     </ul>
 
+    <!-- User Claims -->
     <h4>Claims</h4>
     <table class="table">
         <thead>
@@ -57,6 +66,7 @@
     </table>
 </div>
 
+<!-- Navigation -->
 <div>
     <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>

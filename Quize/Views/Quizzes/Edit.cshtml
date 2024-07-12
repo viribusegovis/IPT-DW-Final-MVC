@@ -2,49 +2,61 @@
 
 <h1>Edit Quiz</h1>
 
+<!-- Quiz Edit Form -->
 <form asp-action="Edit" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
 
+    <!-- Quiz Title -->
     <div class="form-group">
         <label asp-for="Title"></label>
         <input asp-for="Title" class="form-control" />
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
 
+    <!-- Quiz Description -->
     <div class="form-group">
         <label asp-for="Description"></label>
         <textarea asp-for="Description" class="form-control" rows="3"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
+    <!-- Quiz Splash Image -->
     <div class="form-group">
         <label asp-for="SplashImage"></label>
         <div class="custom-file">
             <input type="file" class="custom-file-input" id="splashImageFile" name="splashImageFile" onchange="previewImage(this);">
             <label class="custom-file-label" hidden for="splashImageFile">Choose file</label>
         </div>
-        <img id="imagePreview"src="@(string.IsNullOrEmpty(Model.SplashImage) ? "#" : $"/uploads/quizzes/{Model.SplashImage}")" alt="Quiz Splash Image" style="max-width:300px; margin-top:10px; @(string.IsNullOrEmpty(Model.SplashImage) ? "display:none;" : "")" />
+        <img id="imagePreview"
+             src="@(string.IsNullOrEmpty(Model.SplashImage) ? "#" : $"/uploads/quizzes/{Model.SplashImage}")"
+             alt="Quiz Splash Image"
+             style="max-width:300px; margin-top:10px; @(string.IsNullOrEmpty(Model.SplashImage) ? "display:none;" : "")" />
         <span asp-validation-for="SplashImage" class="text-danger"></span>
     </div>
 
+    <!-- Quiz Author -->
     <div class="form-group">
         <label asp-for="Author"></label>
         <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.Authors"></select>
         <span asp-validation-for="AuthorId" class="text-danger"></span>
     </div>
 
+    <!-- Quiz Tags -->
     <div class="form-group">
         <label for="selectedTags" class="control-label">Tags</label>
         <select id="selectedTags" name="selectedTags" class="form-control" asp-items="ViewBag.AvailableTags" multiple>
         </select>
     </div>
+
+    <!-- Form Buttons -->
     <div class="form-group mt-3">
         <input type="submit" value="Save" class="btn btn-primary" />
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>
 </form>
 
+<!-- Scripts Section -->
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
@@ -53,6 +65,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
+        // Image Preview Function
         function previewImage(input) {
             var preview = document.getElementById('imagePreview');
             var file = input.files[0];
@@ -71,7 +84,9 @@
             }
         }
 
+        // Document Ready Function
         $(document).ready(function () {
+            // Custom file input label update
             $('.custom-file-input').on('change', function () {
                 var fileName = $(this).val().split('\\').pop();
                 $(this).next('.custom-file-label').html(fileName);

@@ -2,23 +2,30 @@
 
 <h2>Edit Question</h2>
 
+<!-- Question Edit Form -->
 <form asp-action="Edit" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
     <input type="hidden" asp-for="QuizId" />
 
+    <!-- Question Text -->
     <div class="form-group">
         <label asp-for="Text" class="control-label"></label>
         <textarea asp-for="Text" class="form-control"></textarea>
         <span asp-validation-for="Text" class="text-danger"></span>
     </div>
 
+    <!-- Question Image Upload -->
     <div class="form-group">
         <label asp-for="SplashImage" class="control-label"></label>
         <input type="file" name="splashImageFile" id="splashImageFile" class="form-control" onchange="previewImage(this);" />
-        <img id="imagePreview" src="@(string.IsNullOrEmpty(Model.SplashImage) ? "#" : $"/uploads/questions/{Model.SplashImage}")" alt="Question Image" style="max-width:200px; margin-top:10px; @(string.IsNullOrEmpty(Model.SplashImage) ? "display:none;" : "")" />
+        <img id="imagePreview"
+             src="@(string.IsNullOrEmpty(Model.SplashImage) ? "#" : $"/uploads/questions/{Model.SplashImage}")"
+             alt="Question Image"
+             style="max-width:200px; margin-top:10px; @(string.IsNullOrEmpty(Model.SplashImage) ? "display:none;" : "")" />
     </div>
 
+    <!-- Answer Options -->
     <h4>Answers</h4>
     @for (int i = 0; i < Model.Answers_List.Count; i++)
     {
@@ -26,7 +33,8 @@
             <div class="input-group">
                 <div class="input-group-prepend">
                     <div class="input-group-text h-100">
-                        <input type="radio" name="CorrectAnswer" value="@(Model.Answers_List.ElementAt(i).Id)"
+                        <input type="radio" name="CorrectAnswer"
+                               value="@(Model.Answers_List.ElementAt(i).Id)"
                         @(Model.Answers_List.ElementAt(i).CorrectAnswer ? "checked" : "") />
                     </div>
                 </div>
@@ -36,18 +44,20 @@
         </div>
     }
 
+    <!-- Form Buttons -->
     <div class="form-group mt-3">
         <input type="submit" value="Save" class="btn btn-primary" />
         <button asp-controller="Quizzes" asp-action="Index" asp-route-id="@Model.QuizId" class="btn btn-secondary">Back to Quiz</button>
-
     </div>
 </form>
 
+<!-- Scripts Section -->
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
+        // Image Preview Function
         function previewImage(input) {
             var preview = document.getElementById('imagePreview');
             var file = input.files[0];
