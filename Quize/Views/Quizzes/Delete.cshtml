@@ -1,0 +1,84 @@
+﻿@model Quize.Models.Quizzes
+
+@{
+    ViewData["Title"] = "Delete Quiz";
+}
+
+<h1>Delete Quiz</h1>
+
+@* Delete confirmation alert *@
+<div class="alert alert-danger">
+    <h4>You're about to delete the quiz "@Model.Title"</h4>
+    <p>This action cannot be undone. Are you sure you want to proceed?</p>
+</div>
+
+@* Quiz details card *@
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Quiz Details</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            @* Quiz title *@
+            <dt class="col-sm-3">Title</dt>
+            <dd class="col-sm-9">@Model.Title</dd>
+
+            @* Quiz description *@
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+
+            @* Quiz author *@
+            <dt class="col-sm-3">Author</dt>
+            <dd class="col-sm-9">@Model.Author.Username</dd>
+
+            @* Quiz tags *@
+            <dt class="col-sm-3">Tags</dt>
+            <dd class="col-sm-9">
+                @foreach (var quizTag in Model.QuizzesTags_List)
+                {
+                    <span class="badge bg-primary rounded-pill me-2">@quizTag.Tag.Name</span>
+                }
+            </dd>
+        </dl>
+    </div>
+</div>
+
+@* Questions and answers card *@
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Questions and Answers</h5>
+    </div>
+    <div class="card-body">
+        @foreach (var question in Model.Questions_List)
+        {
+            @* Individual question card *@
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h6>Question: @question.Text</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        @foreach (var answer in question.Answers_List)
+                        {
+                            @* Answer list item *@
+                            <li class="list-group-item @(answer.CorrectAnswer ? "list-group-item-success" : "")">
+                                @answer.Text
+                                @if (answer.CorrectAnswer)
+                                {
+                                    <span class="badge bg-success float-end">Correct</span>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@* Delete confirmation form *@
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete Quiz</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
